@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Romberg Calculator</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        input { margin: 5px; padding: 8px; }
+        button { padding: 10px; }
+        pre { background: #eee; padding: 10px; }
+    </style>
+</head>
+
+<body>
+
+<h1>Romberg Integration Calculator</h1>
+
+<input id="a" placeholder="Lower limit a">
+<input id="b" placeholder="Upper limit b">
+<input id="level" placeholder="Level">
+
+<br>
+
+<button onclick="compute()">Calculate</button>
+
+<h3>Result:</h3>
+<p id="result"></p>
+
+<h3>Table:</h3>
+<pre id="table"></pre>
+
+<script>
+async function compute() {
+    const a = document.getElementById("a").value;
+    const b = document.getElementById("b").value;
+    const level = document.getElementById("level").value;
+
+    const res = await fetch("/api", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({a, b, level})
+    });
+
+    const data = await res.json();
+
+    document.getElementById("result").innerText =
+        "Approximation: " + data.result;
+
+    document.getElementById("table").innerText =
+        JSON.stringify(data.table, null, 2);
+}
+</script>
+
+</body>
+</html>
